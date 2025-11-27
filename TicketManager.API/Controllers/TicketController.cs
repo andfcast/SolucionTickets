@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TicketManager.Application.DTO.Entities;
+using TicketManager.Application.Services.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,24 +10,34 @@ namespace TicketManager.API.Controllers
     [ApiController]
     public class TicketController : ControllerBase
     {
+        private readonly ITicketService _ticketService;
+
+        public TicketController(ITicketService ticketService)
+        {
+            _ticketService = ticketService;
+        }
+
         // GET: api/<TicketController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        [Route("GetAll")]
+        public async Task<ActionResult> GetAll()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(new string[] { "value1", "value2" });
         }
 
         // GET api/<TicketController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("Details/{id:int}")]        
+        public async Task<ActionResult> GetById(int id)
         {
-            return "value";
+            return Ok("value");
         }
 
-        // POST api/<TicketController>
+        
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Route("CreateNew")]
+        public async Task<IActionResult> CreateNew([FromBody] TicketDTO dto)
         {
+            return Ok("Todo bien");
         }
 
         // PUT api/<TicketController>/5

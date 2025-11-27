@@ -63,6 +63,7 @@ namespace TicketManager.Infrastructure.Migrations
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
                     StatusId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Title = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     Active = table.Column<bool>(type: "INTEGER", nullable: false)
                 },
@@ -96,20 +97,27 @@ namespace TicketManager.Infrastructure.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     TicketId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: false),                    
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    StatusId = table.Column<int>(type: "INTEGER", nullable: false),
                     Text = table.Column<string>(type: "TEXT", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "TEXT", nullable: false),                    
+                    CreationDate = table.Column<DateTime>(type: "TEXT", nullable: false)                    
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TicketComments", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_TicketComments_TicketStatuses_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "TicketStatuses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_TicketComments_Tickets_TicketId",
                         column: x => x.TicketId,
                         principalTable: "Tickets",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);                    
-                    table.ForeignKey(
+                        onDelete: ReferentialAction.Cascade);
+            table.ForeignKey(
                         name: "FK_TicketComments_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
@@ -144,15 +152,19 @@ namespace TicketManager.Infrastructure.Migrations
                 columns: new[] { "Id", "Active", "FullName", "UserName" },
                 values: new object[,]
                 {
-                    { 1, false, "Andrés Castañeda", "acastaneda" },
-                    { 2, false, "Felipe Díaz", "fdiaz" }
+                    { 1, true, "Andrés Castañeda", "acastaneda" },
+                    { 2, true, "Felipe Díaz", "fdiaz" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TicketComments_StatusId",
+                table: "TicketComments",
+                column: "StatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TicketComments_TicketId",
                 table: "TicketComments",
-                column: "TicketId");
-
+                column: "TicketId");            
 
             migrationBuilder.CreateIndex(
                 name: "IX_TicketComments_UserId",

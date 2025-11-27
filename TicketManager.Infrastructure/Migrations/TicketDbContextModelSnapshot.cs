@@ -73,6 +73,10 @@ namespace TicketManager.Infrastructure.Migrations
                     b.Property<int>("StatusId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 

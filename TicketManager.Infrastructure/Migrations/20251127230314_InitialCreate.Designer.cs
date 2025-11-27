@@ -11,7 +11,7 @@ using TicketManager.Infrastructure.Persistence;
 namespace TicketManager.Infrastructure.Migrations
 {
     [DbContext(typeof(TicketDbContext))]
-    [Migration("20251127212435_InitialCreate")]
+    [Migration("20251127230314_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -75,6 +75,10 @@ namespace TicketManager.Infrastructure.Migrations
 
                     b.Property<int>("StatusId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");

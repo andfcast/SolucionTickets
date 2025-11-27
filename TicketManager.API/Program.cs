@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using TicketManager.API.Services.Implementation;
-using TicketManager.API.Services.Interfaces;
+using TicketManager.Application.Services.Implementation;
+using TicketManager.Application.Services.Interfaces;
 using TicketManager.Domain.Repositories;
 using TicketManager.Infrastructure.Persistence;
 using TicketManager.Infrastructure.Repositories;
