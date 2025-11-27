@@ -1,6 +1,6 @@
 namespace TicketManager.Tests
 {
-    public class UnitTest1
+    public class TicketServiceTest
     {
         [Fact]
         public void Test1()
