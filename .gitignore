@@ -54,3 +54,4 @@ TestResult.xml
 nunit-*.xml
 /SolucionTickets/.vs/SolucionTickets
 /.vs/SolucionTickets
+/.vs/ProjectEvaluation
