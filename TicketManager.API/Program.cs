@@ -8,6 +8,11 @@ using TicketManager.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole(); // Logs to the console
+builder.Logging.AddDebug(); // Logs to Visual Studio's Debug output window
+
 // Add services to the container.
 
 builder.Services.AddControllers();
