@@ -42,5 +42,18 @@ namespace TicketManager.Application.Utilities
                 FullUserName = entity.User.FullName
             };
         }
+
+        public static Ticket ConvertToEntity(TicketEditDTO dto) {
+            return new Ticket
+            {
+                Id = dto.Id,
+                Active = true,
+                CategoryId = dto.CategoryId,
+                Description = dto.Description,
+                StatusId = dto.StatusId,
+                Title = dto.Title,
+                UserId = dto.UserId
+            };
+        }
     }
 }

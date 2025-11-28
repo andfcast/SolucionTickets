@@ -7,8 +7,8 @@ namespace TicketManager.Application.Services.Interfaces
     {
         Task<ResponseDTO> GetAll();
         Task<ResponseDTO> GetById(int id);
-        Task<ResponseDTO> CreateNew(TicketDTO objDto);
-        Task<ResponseDTO> Update(TicketDTO objDto);
+        Task<ResponseDTO> CreateNew(TicketEditDTO objDto);
+        Task<ResponseDTO> Update(TicketEditDTO objDto);
         Task<ResponseDTO> InsertComment(TicketLogDTO objLog);
         Task<ResponseDTO> Delete(int id);
     }

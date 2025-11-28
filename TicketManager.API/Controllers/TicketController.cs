@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TicketManager.Application.DTO.Entities;
+using TicketManager.Application.DTO.RequestResponse;
 using TicketManager.Application.Services.Interfaces;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -22,34 +23,62 @@ namespace TicketManager.API.Controllers
         [Route("GetAll")]
         public async Task<ActionResult> GetAll()
         {
-            return Ok(new string[] { "value1", "value2" });
+            ResponseDTO response =await _ticketService.GetAll();
+            if (!response.IsValid)
+                return NotFound(response);
+            return Ok(response);
         }
 
         // GET api/<TicketController>/5
         [HttpGet("Details/{id:int}")]        
         public async Task<ActionResult> GetById(int id)
         {
-            return Ok("value");
+            ResponseDTO response = await _ticketService.GetById(id);
+            if (!response.IsValid)
+                return NotFound(response);
+            return Ok(response);
         }
 
         
         [HttpPost]
         [Route("CreateNew")]
-        public async Task<IActionResult> CreateNew([FromBody] TicketDTO dto)
+        public async Task<IActionResult> CreateNew([FromBody] TicketEditDTO dto)
         {
-            return Ok("Todo bien");
+            ResponseDTO response = await _ticketService.CreateNew(dto);
+            if (!response.IsValid)
+                return BadRequest(response);
+            return Ok(response);
         }
 
-        // PUT api/<TicketController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost]
+        [Route("AddComment")]
+        public async Task<IActionResult> AddComment([FromBody] TicketLogDTO dto)
         {
+            ResponseDTO response = await _ticketService.InsertComment(dto);
+            if (!response.IsValid)
+                return BadRequest(response);
+            return Ok(response);
         }
 
-        // DELETE api/<TicketController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+
+        [HttpPut]
+        [Route("Update")]
+        public async Task<IActionResult> Update([FromBody] TicketEditDTO dto)
         {
+            ResponseDTO response = await _ticketService.Update(dto);
+            if (!response.IsValid)
+                return BadRequest(response);
+            return Ok(response);
+        }
+
+        
+        [HttpDelete("Delete/{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            ResponseDTO response = await _ticketService.Delete(id);
+            if (!response.IsValid)
+                return BadRequest(response);
+            return Ok(response);
         }
     }
 }

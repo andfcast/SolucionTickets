@@ -10,6 +10,6 @@ namespace TicketManager.Application.DTO.RequestResponse
     {
         public bool IsValid { get; set; }
         public string Message { get; set; }
-        public string ResultData { get; set; }
+        public object? ResultData { get; set; }
     }
 }
