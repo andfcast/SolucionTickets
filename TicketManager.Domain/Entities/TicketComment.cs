@@ -12,13 +12,11 @@ namespace TicketManager.Domain.Entities
         [Key]
         public int Id { get; set; }
         public int TicketId { get; set; }
-        public int UserId { get; set; }
-        public int StatusId { get; set; }
+        public int UserId { get; set; }        
         [Required(AllowEmptyStrings = false)]
         public string Text { get; set; }
         public DateTime CreationDate { get; set; }
         public Ticket? Ticket { get; set; }
-        public User User { get; set; }
-        public TicketStatus Status { get; set; }
+        public User User { get; set; }        
     }
 }

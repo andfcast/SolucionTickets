@@ -7,9 +7,9 @@ using TicketManager.Domain.Entities;
 
 namespace TicketManager.Domain.Repositories
 {
-    public interface IUserRepository
+    public interface ICategoryRepository
     {
-        Task<List<User>> GetAll();
-        Task<User> GetUser(int id, string username);
+        Task<List<Category>> GetAll();
+        Task<Category> GetCategory(int id);
     }
 }

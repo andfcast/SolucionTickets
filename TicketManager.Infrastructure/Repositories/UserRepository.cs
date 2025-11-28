@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TicketManager.Domain.Entities;
-using TicketManager.Domain.Interfaces;
+using TicketManager.Domain.Repositories;
 using TicketManager.Infrastructure.Persistence;
 
 namespace TicketManager.Infrastructure.Repositories
@@ -17,12 +17,17 @@ namespace TicketManager.Infrastructure.Repositories
             _context = context;
         }
 
-        public Task<User> GetUser(int id, string username)
+        public async Task<List<User>> GetAll()
+        {
+            return await _context.Users.ToListAsync();
+        }
+
+        public async Task<User> GetUser(int id, string username)
         {
             if (id != 0)
-                return _context.Users.FirstAsync(x => x.Id == id);
+                return await _context.Users.FirstAsync(x => x.Id == id);
             if (!string.IsNullOrEmpty(username)) { 
-                return _context.Users.FirstAsync(x => x.UserName == username);
+                return await _context.Users.FirstAsync(x => x.UserName == username);
             }
             return null;
         }

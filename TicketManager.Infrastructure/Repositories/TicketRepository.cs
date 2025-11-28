@@ -23,9 +23,15 @@ namespace TicketManager.Infrastructure.Repositories
             return await _context.Tickets.Include(x => x.Comments).ThenInclude(y => y.User).Include(x => x.Category).Include(x => x.Status).Include(x => x.User).FirstAsync(x => x.Id == id);
         }
         public async Task<int> Insert(Ticket entity) {
-            await _context.Tickets.AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return entity.Id;
+            try
+            {
+                await _context.Tickets.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                return entity.Id;
+            }
+            catch {
+                return -1;
+            }            
         }
         public async Task<bool> Update(Ticket entity)
         {

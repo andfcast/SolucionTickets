@@ -55,5 +55,16 @@ namespace TicketManager.Application.Utilities
                 UserId = dto.UserId
             };
         }
+
+        public static TicketComment ConvertToEntity(TicketLogDTO dto)
+        {
+            return new TicketComment
+            {
+                Id = dto.Id,
+                CreationDate = DateTime.Now,
+                Text = dto.Text,
+                TicketId = dto.TicketId                
+            };
+        }        
     }
 }

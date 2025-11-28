@@ -100,29 +100,19 @@ namespace TicketManager.Infrastructure.Migrations
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("StatusId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("TicketId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("TicketId1")
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("INTEGER");                    
 
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StatusId");
-
-                    b.HasIndex("TicketId");
-
-                    b.HasIndex("TicketId1");
+                    b.HasIndex("TicketId");                    
 
                     b.HasIndex("UserId");
 
@@ -147,17 +137,12 @@ namespace TicketManager.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "Nuevo"
+                            Description = "Abierto"
                         },
                         new
                         {
                             Id = 2,
-                            Description = "En proceso"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Solucionado"
+                            Description = "En progreso"
                         },
                         new
                         {
@@ -191,14 +176,14 @@ namespace TicketManager.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Active = false,
+                            Active = true,
                             FullName = "Andrés Castañeda",
                             UserName = "acastaneda"
                         },
                         new
                         {
                             Id = 2,
-                            Active = false,
+                            Active = true,
                             FullName = "Felipe Díaz",
                             UserName = "fdiaz"
                         });
@@ -233,29 +218,16 @@ namespace TicketManager.Infrastructure.Migrations
 
             modelBuilder.Entity("TicketManager.Domain.Entities.TicketComment", b =>
                 {
-                    b.HasOne("TicketManager.Domain.Entities.TicketStatus", "Status")
-                        .WithMany()
-                        .HasForeignKey("StatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("TicketManager.Domain.Entities.Ticket", "Ticket")
-                        .WithMany()
-                        .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("TicketManager.Domain.Entities.Ticket", null)
                         .WithMany("Comments")
-                        .HasForeignKey("TicketId1");
+                        .HasForeignKey("TicketId")
+                        .OnDelete(DeleteBehavior.Restrict);                    
 
                     b.HasOne("TicketManager.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Status");
 
                     b.Navigation("Ticket");
 

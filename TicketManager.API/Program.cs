@@ -19,6 +19,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<TicketDbContext>();
 builder.Services.AddTransient<ITicketService, TicketService>();
 builder.Services.AddTransient<ITicketRepository, TicketRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
+builder.Services.AddTransient<IStatusRepository, StatusRepository>();
 
 var app = builder.Build();
 

@@ -9,7 +9,7 @@ namespace TicketManager.Application.DTO.RequestResponse
     public class ResponseDTO
     {
         public bool IsValid { get; set; }
-        public string Message { get; set; }
+        public string Message { get; set; } = String.Empty;
         public object? ResultData { get; set; }
     }
 }

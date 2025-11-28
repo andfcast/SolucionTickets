@@ -42,16 +42,28 @@ namespace TicketManager.Infrastructure.Persistence
                 .HasForeignKey(a => a.StatusId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Ticket>()
+                .HasMany(a => a.Comments)
+                .WithOne(a => a.Ticket)
+                .HasForeignKey(a => a.TicketId)
+                .IsRequired(false);
+                
+
             modelBuilder.Entity<TicketComment>()
                 .HasOne(a => a.Ticket)
                 .WithMany()
                 .HasForeignKey(a => a.TicketId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<TicketComment>()
+                .HasOne(a => a.User)
+                .WithMany()
+                .HasForeignKey(a => a.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<TicketStatus>().HasData(
-               new TicketStatus { Id = 1, Description = "Nuevo" },
-               new TicketStatus { Id = 2, Description = "En proceso" },
-               new TicketStatus { Id = 3, Description = "Solucionado" },
+               new TicketStatus { Id = 1, Description = "Abierto" },
+               new TicketStatus { Id = 2, Description = "En progreso" },               
                new TicketStatus { Id = 4, Description = "Cerrado" }
             );
 
@@ -63,8 +75,8 @@ namespace TicketManager.Infrastructure.Persistence
             );
 
             modelBuilder.Entity<User>().HasData(
-               new User { Id = 1, FullName = "Andrés Castañeda", UserName = "acastaneda" },
-               new User { Id = 2, FullName = "Felipe Díaz", UserName = "fdiaz" }               
+               new User { Id = 1, Active = true, FullName = "Andrés Castañeda", UserName = "acastaneda" },
+               new User { Id = 2, Active = true, FullName = "Felipe Díaz", UserName = "fdiaz" }               
             );
 
         }

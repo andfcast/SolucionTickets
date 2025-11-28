@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TicketManager.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -98,31 +98,24 @@ namespace TicketManager.Infrastructure.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     TicketId = table.Column<int>(type: "INTEGER", nullable: false),
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
-                    StatusId = table.Column<int>(type: "INTEGER", nullable: false),
                     Text = table.Column<string>(type: "TEXT", nullable: false),
-                    CreationDate = table.Column<DateTime>(type: "TEXT", nullable: false)                    
+                    CreationDate = table.Column<DateTime>(type: "TEXT", nullable: false),                    
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TicketComments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TicketComments_TicketStatuses_StatusId",
-                        column: x => x.StatusId,
-                        principalTable: "TicketStatuses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_TicketComments_Tickets_TicketId",
                         column: x => x.TicketId,
                         principalTable: "Tickets",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-            table.ForeignKey(
+                        onDelete: ReferentialAction.Restrict);                    
+                    table.ForeignKey(
                         name: "FK_TicketComments_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -141,9 +134,8 @@ namespace TicketManager.Infrastructure.Migrations
                 columns: new[] { "Id", "Description" },
                 values: new object[,]
                 {
-                    { 1, "Nuevo" },
-                    { 2, "En proceso" },
-                    { 3, "Solucionado" },
+                    { 1, "Abierto" },
+                    { 2, "En progreso" },
                     { 4, "Cerrado" }
                 });
 
@@ -155,11 +147,6 @@ namespace TicketManager.Infrastructure.Migrations
                     { 1, true, "Andrés Castañeda", "acastaneda" },
                     { 2, true, "Felipe Díaz", "fdiaz" }
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_TicketComments_StatusId",
-                table: "TicketComments",
-                column: "StatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TicketComments_TicketId",

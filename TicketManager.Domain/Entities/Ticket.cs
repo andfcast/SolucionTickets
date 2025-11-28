@@ -20,6 +20,6 @@ namespace TicketManager.Domain.Entities
         public User? User { get; set; }
         public Category? Category { get; set; }
         public TicketStatus? Status { get; set; }
-        public List<TicketComment> Comments { get; set; }
+        public List<TicketComment>? Comments { get; set; }
     }
 }
