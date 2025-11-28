@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TicketManager.Application.Middleware;
 using TicketManager.Application.Services.Implementation;
 using TicketManager.Application.Services.Interfaces;
 using TicketManager.Domain.Repositories;
@@ -31,6 +32,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<TicketCustomMiddleware>();
 
 app.UseHttpsRedirection();
 

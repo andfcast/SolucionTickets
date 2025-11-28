@@ -62,12 +62,18 @@ namespace TicketManager.Infrastructure.Repositories
         }
         public async Task<bool> Delete(int id)
         {
-            Ticket objDelete = await _context.Tickets.FirstAsync(x => x.Id == id);
-            objDelete.Active = false;
-            objDelete.UpdateDate = DateTime.Now;
-            _context.Entry(objDelete).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return true;
+            try {
+                Ticket objDelete = await _context.Tickets.FirstAsync(x => x.Id == id);
+                objDelete.Active = false;
+                objDelete.UpdateDate = DateTime.Now;
+                _context.Entry(objDelete).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch {
+                return false;
+            }
+            
         }
         public async Task<int> AddComment(TicketComment comment) {
             await _context.TicketComments.AddAsync(comment);
