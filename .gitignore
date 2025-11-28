@@ -52,3 +52,8 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+/SolucionTickets/.vs/SolucionTickets
+/.vs/SolucionTickets
+/.vs/ProjectEvaluation
+/TicketManager.API/DB/TicketDB.db-shm
+/TicketManager.API/DB/TicketDB.db-wal
