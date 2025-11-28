@@ -13,7 +13,8 @@ namespace TicketManager.Infrastructure.Repositories
     public class UserRepository : IUserRepository
     {
         private readonly TicketDbContext _context;
-        public UserRepository(TicketDbContext context) {
+        public UserRepository(TicketDbContext context)
+        {
             _context = context;
         }
 
@@ -26,10 +27,20 @@ namespace TicketManager.Infrastructure.Repositories
         {
             if (id != 0)
                 return await _context.Users.FirstAsync(x => x.Id == id);
-            if (!string.IsNullOrEmpty(username)) { 
-                return await _context.Users.FirstAsync(x => x.UserName == username);
+            if (!string.IsNullOrEmpty(username))
+            {
+                return await _context.Users.FirstAsync(x => x.UserName.ToLower() == username.ToLower());
             }
             return null;
+        }
+
+        public async Task<bool> IsValidUser(int id, string username)
+        {
+            if (id != 0)
+                return await _context.Users.CountAsync(x => x.Id == id) > 0;
+            if (!string.IsNullOrEmpty(username))
+                return await _context.Users.CountAsync(x => x.UserName.ToLower() == username.ToLower()) > 0;
+            return false;
         }
     }
 }

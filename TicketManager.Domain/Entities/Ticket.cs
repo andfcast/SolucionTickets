@@ -16,6 +16,8 @@ namespace TicketManager.Domain.Entities
         public int StatusId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public DateTime CreationDate { get; set; } = DateTime.Now;
+        public DateTime? UpdateDate { get; set; }
         public bool Active { get; set; }
         public User? User { get; set; }
         public Category? Category { get; set; }

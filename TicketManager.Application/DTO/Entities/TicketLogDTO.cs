@@ -16,7 +16,7 @@ namespace TicketManager.Application.DTO.Entities
         public string Text { get; set; }
         [Required(ErrorMessage = "Campo obligatorio")]
         public string UserName { get; set; }
-        public string FullUserName { get; set; }
+        public string? FullUserName { get; set; }
         public DateTime RegDate { get; set; } = DateTime.Now;
     }
 }

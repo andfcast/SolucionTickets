@@ -40,20 +40,13 @@ namespace TicketManager.Infrastructure.Persistence
                 .HasOne(a => a.Status)
                 .WithMany()
                 .HasForeignKey(a => a.StatusId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Ticket>()
-                .HasMany(a => a.Comments)
-                .WithOne(a => a.Ticket)
-                .HasForeignKey(a => a.TicketId)
-                .IsRequired(false);
-                
+                .OnDelete(DeleteBehavior.Restrict);                            
 
             modelBuilder.Entity<TicketComment>()
                 .HasOne(a => a.Ticket)
                 .WithMany()
                 .HasForeignKey(a => a.TicketId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Restrict); 
 
             modelBuilder.Entity<TicketComment>()
                 .HasOne(a => a.User)

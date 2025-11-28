@@ -10,5 +10,6 @@ namespace TicketManager.Domain.Repositories
         Task<bool> Update(Ticket entity);
         Task<bool> Delete(int id);
         Task<int> AddComment(TicketComment comment);
+        Task<bool> IsValidTicket(int id);
     }
 }

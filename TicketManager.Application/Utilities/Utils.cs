@@ -22,12 +22,16 @@ namespace TicketManager.Application.Utilities
                 CategoryId = entity.CategoryId,
                 CategoryName = entity.Category!.Description,
                 Comments = lstLogs,
+                CreationDate = entity.CreationDate,
                 Description = entity.Description,
                 StatusId = entity.StatusId,
                 StatusName = entity.Status!.Description,
                 Title = entity.Title,
+                UpdateDate = entity.UpdateDate,
                 UserFullName = entity.User!.FullName,
+                UserId = entity.UserId,
                 UserName = entity.User.UserName
+                
             };
         }
 

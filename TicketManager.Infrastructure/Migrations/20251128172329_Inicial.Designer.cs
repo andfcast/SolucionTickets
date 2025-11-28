@@ -11,8 +11,8 @@ using TicketManager.Infrastructure.Persistence;
 namespace TicketManager.Infrastructure.Migrations
 {
     [DbContext(typeof(TicketDbContext))]
-    [Migration("20251128152726_Initial")]
-    partial class Initial
+    [Migration("20251128172329_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,6 +69,9 @@ namespace TicketManager.Infrastructure.Migrations
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -78,6 +81,9 @@ namespace TicketManager.Infrastructure.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("UserId")
@@ -184,14 +190,14 @@ namespace TicketManager.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Active = false,
+                            Active = true,
                             FullName = "Andrés Castañeda",
                             UserName = "acastaneda"
                         },
                         new
                         {
                             Id = 2,
-                            Active = false,
+                            Active = true,
                             FullName = "Felipe Díaz",
                             UserName = "fdiaz"
                         });
@@ -229,7 +235,8 @@ namespace TicketManager.Infrastructure.Migrations
                     b.HasOne("TicketManager.Domain.Entities.Ticket", "Ticket")
                         .WithMany()
                         .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("TicketManager.Domain.Entities.Ticket", null)
                         .WithMany("Comments")

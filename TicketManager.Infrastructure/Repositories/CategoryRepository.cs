@@ -26,5 +26,10 @@ namespace TicketManager.Infrastructure.Repositories
         {            
             return await _context.Categories.FirstAsync(x => x.Id == id);            
         }
+
+        public async Task<bool> IsValidCategory(int id)
+        {
+            return await _context.Categories.CountAsync(x => x.Id == id) > 0;
+        }
     }
 }

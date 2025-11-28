@@ -16,15 +16,29 @@ namespace TicketManager.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<List<Ticket>> GetAll() {
-            return await _context.Tickets.Include(x => x.Comments).ThenInclude(y => y.User).Include(x => x.Category).Include(x => x.Status).Include(x => x.User).ToListAsync();
+        public async Task<List<Ticket>> GetAll() {            
+            List<Ticket> lstTickets = await _context.Tickets.Include(x => x.Category).Include(x => x.Status).Include(x => x.User).Where(y => y.Active == true).ToListAsync();
+            foreach (var item in lstTickets) {
+                item.Comments = await _context.TicketComments.Include(x => x.User).Where(y => y.TicketId == item.Id).ToListAsync();
+            }
+            return lstTickets;
         }
         public async Task<Ticket> GetById(int id) {
-            return await _context.Tickets.Include(x => x.Comments).ThenInclude(y => y.User).Include(x => x.Category).Include(x => x.Status).Include(x => x.User).FirstAsync(x => x.Id == id);
+
+            try
+            {
+                Ticket objTicket = await _context.Tickets.Include(x => x.Category).Include(x => x.Status).Include(x => x.User).FirstAsync(x => x.Id == id && x.Active == true);
+                objTicket.Comments = await _context.TicketComments.Include(x => x.User).Where(y => y.TicketId == objTicket.Id).ToListAsync();
+                return objTicket! as Ticket;
+            }
+            catch {
+                return null;
+            }            
         }
         public async Task<int> Insert(Ticket entity) {
             try
             {
+                entity.CreationDate = DateTime.Now;
                 await _context.Tickets.AddAsync(entity);
                 await _context.SaveChangesAsync();
                 return entity.Id;
@@ -37,6 +51,7 @@ namespace TicketManager.Infrastructure.Repositories
         {
             try
             {
+                entity.UpdateDate = DateTime.Now;
                 _context.Entry(entity).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
                 return true;
@@ -49,6 +64,7 @@ namespace TicketManager.Infrastructure.Repositories
         {
             Ticket objDelete = await _context.Tickets.FirstAsync(x => x.Id == id);
             objDelete.Active = false;
+            objDelete.UpdateDate = DateTime.Now;
             _context.Entry(objDelete).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return true;
@@ -57,6 +73,11 @@ namespace TicketManager.Infrastructure.Repositories
             await _context.TicketComments.AddAsync(comment);
             await _context.SaveChangesAsync();
             return comment.Id;
+        }
+
+        public async Task<bool> IsValidTicket(int id)
+        {
+            return await _context.Tickets.CountAsync(x => x.Id == id) > 0;
         }
     }
 }

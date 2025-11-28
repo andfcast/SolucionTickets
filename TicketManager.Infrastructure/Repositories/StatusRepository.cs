@@ -26,5 +26,12 @@ namespace TicketManager.Infrastructure.Repositories
         {            
             return _context.TicketStatuses.FirstAsync(x => x.Id == id);            
         }
+
+        public async Task<bool> IsValidStatus(int id)
+        {
+            return await _context.TicketStatuses.CountAsync(x => x.Id == id) > 0;
+        }
+
+        
     }
 }

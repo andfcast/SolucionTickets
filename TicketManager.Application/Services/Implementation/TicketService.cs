@@ -4,7 +4,6 @@ using TicketManager.Application.Services.Interfaces;
 using TicketManager.Application.Utilities;
 using TicketManager.Domain.Entities;
 using TicketManager.Domain.Repositories;
-using TicketManager.Infrastructure.Repositories;
 
 namespace TicketManager.Application.Services.Implementation
 {
@@ -14,7 +13,8 @@ namespace TicketManager.Application.Services.Implementation
         private readonly IUserRepository _userRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IStatusRepository _statusRepository;
-        public TicketService(ITicketRepository ticketRepository, IUserRepository userRepository, ICategoryRepository categoryRepository, IStatusRepository statusRepository) {
+        public TicketService(ITicketRepository ticketRepository, IUserRepository userRepository, 
+                            ICategoryRepository categoryRepository, IStatusRepository statusRepository) {
             _ticketRepository = ticketRepository;
             _userRepository = userRepository;
             _categoryRepository = categoryRepository;
@@ -41,14 +41,18 @@ namespace TicketManager.Application.Services.Implementation
             return new ResponseDTO
             {
                 IsValid = objTicket != null,
-                Message = "",
-                ResultData = Utils.ConvertToDTO(objTicket)
+                Message = objTicket != null ? "": "No item found",
+                ResultData = objTicket != null ? Utils.ConvertToDTO(objTicket) : null
             }; 
         }
         public async Task<ResponseDTO> CreateNew(TicketEditDTO objDto) {
             ResponseDTO response = await IsValidTicket(objDto);
-            if (string.IsNullOrEmpty(response.Message)) {
+            if (!string.IsNullOrEmpty(response.Message)) {
                 return response;
+            }
+            if (objDto.UserId == 0) {
+                var user = await _userRepository.GetUser(0, objDto.UserName!);
+                objDto.UserId = user.Id;
             }
             int valInsert = await _ticketRepository.Insert(Utils.ConvertToEntity(objDto));
             if (valInsert < 0) {                
@@ -62,22 +66,28 @@ namespace TicketManager.Application.Services.Implementation
         }
         public async Task<ResponseDTO> Update(TicketEditDTO objDto) {
             ResponseDTO response = await IsValidTicket(objDto);
-            if (string.IsNullOrEmpty(response.Message)) {
+            if (!string.IsNullOrEmpty(response.Message)) {
                 return response;
             }
+            if (objDto.Id == 0 || !await _ticketRepository.IsValidTicket(objDto.Id)) {
+                response.Message = "Invalid ticket";
+                return response;
+            }
+            var user = await _userRepository.GetUser(0, objDto.UserName!);
+            objDto.UserId = user.Id;
             bool valUpdate = await _ticketRepository.Update(Utils.ConvertToEntity(objDto));
             if (!valUpdate)
             {
-                response.Message = "Error al crear el ticket";
+                response.Message = "Error updating the ticket";
                 return response;
             }
             response.IsValid = true;
-            response.Message = "Operación exitosa";            
+            response.Message = "Process ended successfully";            
             return response;
         }
         public async Task<ResponseDTO> InsertComment(TicketLogDTO objLog) {
             ResponseDTO response = await IsValidComment(objLog);
-            if (string.IsNullOrEmpty(response.Message))
+            if (!string.IsNullOrEmpty(response.Message))
             {
                 return response;
             }
@@ -113,21 +123,21 @@ namespace TicketManager.Application.Services.Implementation
                 response.Message = "Empty ticket";
                 return response;
             } 
-            var status = await _statusRepository.GetStatus(objDto.StatusId);
-            if (status == null) {
+            var status = await _statusRepository.IsValidStatus(objDto.StatusId);
+            if (!status) {
                 response.Message = "Invalid status";
                 return response;
             }
-            var category = await _categoryRepository.GetCategory(objDto.CategoryId);
-            if (category == null)
+            var category = await _categoryRepository.IsValidCategory(objDto.CategoryId);
+            if (!category)
             {
                 response.Message = "Invalid category";
                 return response;
             }
-            var user = await _userRepository.GetUser(objDto.UserId, "");
-            if (user == null)
+            var user = await _userRepository.IsValidUser(objDto.UserId, objDto.UserName);
+            if (!user)
             {
-                response.Message = "invalid user";
+                response.Message = "Invalid user";
                 return response;
             }
             return response;
@@ -141,14 +151,14 @@ namespace TicketManager.Application.Services.Implementation
                 response.Message = "Empty comment";
                 return response;
             }
-            var ticket = await _ticketRepository.GetById(objDto.TicketId);
-            if (ticket == null)
+            var ticket = await _ticketRepository.IsValidTicket(objDto.TicketId);
+            if (!ticket)
             {
                 response.Message = "The related ticket does not exist";
                 return response;
             }            
-            var user = await _userRepository.GetUser(0, objDto.UserName);
-            if (user == null)
+            var user = await _userRepository.IsValidUser(0, objDto.UserName);
+            if (!user)
             {
                 response.Message = "Invalid user";
                 return response;

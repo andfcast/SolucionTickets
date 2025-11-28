@@ -11,5 +11,6 @@ namespace TicketManager.Domain.Repositories
     {
         Task<List<Category>> GetAll();
         Task<Category> GetCategory(int id);
+        Task<bool> IsValidCategory(int id);
     }
 }

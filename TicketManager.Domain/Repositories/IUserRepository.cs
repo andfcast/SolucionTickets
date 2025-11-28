@@ -11,5 +11,6 @@ namespace TicketManager.Domain.Repositories
     {
         Task<List<User>> GetAll();
         Task<User> GetUser(int id, string username);
+        Task<bool> IsValidUser(int id, string username);
     }
 }
